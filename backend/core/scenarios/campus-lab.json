@@ -1,0 +1,110 @@
+{
+  "id": "campus-lab",
+  "name": "Campus Security Lab",
+  "description": "Sample CORE-style topology import for NetVision UI integration.",
+  "graph": {
+    "nodes": [
+      {
+        "id": "core-router-1",
+        "label": "core-router-1",
+        "ip": "10.10.0.1",
+        "hostname": "core-router-1",
+        "status": "up",
+        "risk_level": "green",
+        "open_ports": [],
+        "services": [],
+        "vulnerabilities": []
+      },
+      {
+        "id": "student-web-1",
+        "label": "student-web-1",
+        "ip": "10.10.0.10",
+        "hostname": "student-web-1",
+        "status": "up",
+        "risk_level": "yellow",
+        "open_ports": [22, 80, 443],
+        "services": [
+          {
+            "port": 22,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "ssh",
+            "product": "OpenSSH",
+            "version": "9.6"
+          },
+          {
+            "port": 80,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "http",
+            "product": "nginx",
+            "version": "1.24"
+          },
+          {
+            "port": 443,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "https",
+            "product": "nginx",
+            "version": "1.24"
+          }
+        ],
+        "vulnerabilities": []
+      },
+      {
+        "id": "db-1",
+        "label": "db-1",
+        "ip": "10.10.0.20",
+        "hostname": "db-1",
+        "status": "up",
+        "risk_level": "red",
+        "open_ports": [22, 3306],
+        "services": [
+          {
+            "port": 22,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "ssh",
+            "product": "OpenSSH",
+            "version": "9.3"
+          },
+          {
+            "port": 3306,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "mysql",
+            "product": "MariaDB",
+            "version": "10.11"
+          }
+        ],
+        "vulnerabilities": [
+          "simulated core finding: database segment exposed to workstation subnet"
+        ]
+      },
+      {
+        "id": "workstation-7",
+        "label": "workstation-7",
+        "ip": "10.10.1.15",
+        "hostname": "workstation-7",
+        "status": "up",
+        "risk_level": "yellow",
+        "open_ports": [3389],
+        "services": [
+          {
+            "port": 3389,
+            "protocol": "tcp",
+            "state": "open",
+            "service": "rdp",
+            "product": "Microsoft Terminal Services"
+          }
+        ],
+        "vulnerabilities": []
+      }
+    ],
+    "edges": [
+      { "source": "core-router-1", "target": "student-web-1", "relation": "link" },
+      { "source": "core-router-1", "target": "db-1", "relation": "link" },
+      { "source": "core-router-1", "target": "workstation-7", "relation": "link" }
+    ]
+  }
+}

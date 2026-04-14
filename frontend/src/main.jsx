@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { getHealth, getScanLog, getScanLogs, runScan, runScanStream } from "./services/api";
 import { NetworkGraph } from "./components/NetworkGraph";
 import { NodeDetails } from "./components/NodeDetails";
+import { CoreControls } from "./components/CoreControls";
 import { ScanControls } from "./components/ScanControls";
 import { ScanHistory } from "./components/ScanHistory";
 import "./styles.css";
@@ -16,6 +17,7 @@ function App() {
   const [serverOk, setServerOk] = useState(null);
   const [useWebSocket, setUseWebSocket] = useState(false);
   const [liveLogs, setLiveLogs] = useState([]);
+  const [graphSource, setGraphSource] = useState("scan");
 
   const selectedNode = useMemo(
     () => graph.nodes.find((node) => node.id === selectedNodeId) || null,
@@ -79,6 +81,7 @@ function App() {
     const applyScan = async (scan) => {
       setGraph(scan.result.graph);
       setSelectedNodeId(scan.result.graph.nodes[0]?.id ?? null);
+      setGraphSource(scan.scanner || "scan");
       await loadHistory();
     };
 
@@ -108,9 +111,17 @@ function App() {
       const entry = await getScanLog(scanId);
       setGraph(entry.result.graph);
       setSelectedNodeId(entry.result.graph.nodes[0]?.id ?? null);
+      setGraphSource(`replay:${entry.scanner}`);
     } catch (replayError) {
       setError(replayError.message);
     }
+  }
+
+  function onLoadCoreGraph(nextGraph, payload) {
+    setError("");
+    setGraph(nextGraph);
+    setSelectedNodeId(nextGraph.nodes[0]?.id ?? null);
+    setGraphSource(`core:${payload.scenario_id}`);
   }
 
   return (
@@ -142,6 +153,8 @@ function App() {
             useWebSocket={useWebSocket}
             onUseWebSocketChange={setUseWebSocket}
           />
+          <div className="section-divider" />
+          <CoreControls isRunning={isRunning} onLoadGraph={onLoadCoreGraph} />
           {useWebSocket && (
             <section className="live-log-panel">
               <h3>Live output</h3>
@@ -154,6 +167,7 @@ function App() {
         </div>
 
         <div className="panel graph-panel">
+          <div className="graph-source">Active graph source: {graphSource}</div>
           <NetworkGraph graph={graph} selectedNodeId={selectedNodeId} onSelectNode={setSelectedNodeId} />
         </div>
 

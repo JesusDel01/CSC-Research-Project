@@ -85,6 +85,11 @@ body {
   border-top: 1px solid #334155;
 }
 
+.section-divider {
+  margin: 1rem 0;
+  border-top: 1px solid #334155;
+}
+
 .live-log-panel h3 {
   margin: 0 0 0.5rem;
   font-size: 0.95rem;
@@ -125,6 +130,12 @@ body {
 
 .graph-panel {
   min-height: 620px;
+}
+
+.graph-source {
+  margin-bottom: 0.75rem;
+  font-size: 0.82rem;
+  color: #93c5fd;
 }
 
 .form {
@@ -210,6 +221,26 @@ button:disabled {
   border-radius: 8px;
   margin-bottom: 1rem;
   background: #450a0a;
+}
+
+.core-status {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #334155;
+  background: #020617;
+  font-size: 0.85rem;
+  color: #cbd5e1;
+}
+
+.core-status.ok {
+  border-color: #10b981;
+}
+
+.core-status.warn {
+  border-color: #f59e0b;
 }
 
 @media (max-width: 1200px) {

@@ -12,6 +12,7 @@ Full-stack network scanning and security dashboard. Backend is **FastAPI** (sepa
 | `backend/app/api/routes/` | HTTP + WebSocket routes |
 | `backend/app/scanners/` | Scanner plugins: `base.py`, `plugins.py` (register all tools here), `nmap_scanner.py`, `stub_scanner.py`, `plugin_template.py` (copy-paste starter) |
 | `backend/app/services/` | Registry, logging, CVE bridge, honeypot heuristics, PDF reports |
+| `backend/core/scenarios/` | CORE-style topology snapshots imported into the graph UI |
 | `backend/logs/` | `scans.jsonl`, `cve_mappings.jsonl` |
 | `frontend/` | React + Vite + D3 (calls `api/v1`) |
 | `Linkers/` | CVE → CWE → CAPEC → ATT&CK / OWASP / WASC → D3FEND (CSV + NVD) |
@@ -47,6 +48,18 @@ Copy `backend/.env.example` and set at least:
 
 - `NETVISION_NVD_API_KEY` — NVD API key for new CVE lookups (`Linkers/cve_cwe_linker.py`).
 - `NETVISION_NMAP_BINARY` — if `nmap` is not on `PATH`.
+- `NETVISION_CORE_BINARY` — CORE CLI binary name/path (defaults to `corectl`).
+- `NETVISION_CORE_SCENARIOS_DIR` — directory of JSON topology snapshots for import mode.
+
+## CORE integration
+
+The first CORE integration slice is now in place:
+
+- `GET /api/v1/core/status` — reports whether the configured CORE binary is available.
+- `GET /api/v1/core/scenarios` — lists importable topology snapshots.
+- `POST /api/v1/core/scenarios/load` — loads a scenario into the existing graph model.
+
+This currently uses a scenario-import adapter rather than full live CORE session orchestration. That means the UI and API hook are ready now, and the next step is teaching `core_service.py` how to create, start, and inspect real CORE sessions.
 
 ## Run backend
 

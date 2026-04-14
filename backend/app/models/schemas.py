@@ -136,3 +136,31 @@ class ScanStreamEvent(BaseModel):
     type: str
     message: str | None = None
     scan: ScanLogEntry | None = None
+
+
+class CoreStatusResponse(BaseModel):
+    available: bool
+    configured_binary: str
+    detected_binary: str | None = None
+    scenario_count: int = 0
+    mode: str
+    message: str
+
+
+class CoreScenarioDescriptor(BaseModel):
+    id: str
+    name: str
+    description: str | None = None
+    node_count: int = 0
+    edge_count: int = 0
+
+
+class CoreScenarioLoadRequest(BaseModel):
+    scenario_id: str = Field(..., min_length=1)
+
+
+class CoreScenarioLoadResponse(BaseModel):
+    scenario_id: str
+    name: str
+    graph: GraphData
+    metadata: dict[str, Any] = Field(default_factory=dict)

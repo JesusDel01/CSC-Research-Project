@@ -104,3 +104,18 @@ export function getScanLogs() {
 export function getScanLog(scanId) {
   return callApi(`/scans/replay/${scanId}`);
 }
+
+export function getCoreStatus() {
+  return callApi("/core/status");
+}
+
+export function getCoreScenarios() {
+  return callApi("/core/scenarios");
+}
+
+export function loadCoreScenario(scenarioId) {
+  return callApi("/core/scenarios/load", {
+    method: "POST",
+    body: JSON.stringify({ scenario_id: scenarioId })
+  });
+}

@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     nmap_binary: str = "nmap"
     default_scan_timeout_seconds: int = 300
     cve_mapping_log_path: Path = Path("backend/logs/cve_mappings.jsonl")
+    core_binary: str = "corectl"
+    core_scenarios_dir: Path = Path("backend/core/scenarios")
 
     model_config = SettingsConfigDict(env_prefix="NETVISION_", extra="ignore")
 
@@ -30,6 +32,10 @@ class Settings(BaseSettings):
     @property
     def cve_mapping_log_file(self) -> Path:
         return self.resolve_path(self.cve_mapping_log_path)
+
+    @property
+    def core_scenarios_path(self) -> Path:
+        return self.resolve_path(self.core_scenarios_dir)
 
 
 settings = Settings()
